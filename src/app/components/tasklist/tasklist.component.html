@@ -1,60 +1,42 @@
-<div class="top-container">
-    <span class="page-title">{{product.name || ''}}: {{'codes.pageTitle' | translate}}</span>
-    <!-- <button (click)="exportCodes()" mat-raised-button color="primary">
-        Export Codes
-    </button> -->
-    <div>
-        <mat-form-field>
-            <input matInput type="number" value="1" placeholder="Number of Codes to Add" #codesNumber />
-        </mat-form-field>
-        <button matTooltip="Add New Code" (click)="createMultipleCodes(codesNumber.value)" mat-icon-button class="add-btn" color="primary">
-            <mat-icon>add</mat-icon>
-        </button>
-    </div>
-</div>
-<div class="import-block-container">
-    <div class="import-btn" (click)="exportCodes()">
-        {{'codes.export' | translate}}
-    </div>
-    <div class="import-btn" *ngIf="!(uploadProgress && uploadProgress < 100)" (click)="importInput.click()">
-        {{'codes.import' | translate}}
-    </div>
-    <div class="import-btn disabledImport" *ngIf="(uploadProgress && uploadProgress < 100)">
-        {{'codes.import' | translate}}
-    </div>
-    <input #importInput class="fileDialog" type="file" accept=".csv" />
-    <div *ngIf="importInput.files && importInput.files.length > 0" class="upload-confirm-block">
-        <div (click)="uploadFileForImport(importInput.files); importInput.value = '';" class="import-btn">
-            {{'codes.upload' | translate}}
-        </div>
-        <h3>{{importInput.files[0].name}}</h3>
-    </div>
-    <div class="import-progress-container">
-        <mat-progress-bar *ngIf="(uploadProgress && uploadProgress < 100)" class="progress-bar" max="100" [value]="(uploadProgress)"></mat-progress-bar>
-    </div>
-</div>
-<mat-card class="product-list-card">
-    <mat-list>
-        <mat-list-item role="listitem" *ngFor="let code of codes" class="product-item">
-            <span class="product-link">{{code.key}}</span>
-            <!-- <button mat-icon-button (click)="deleteCode()">
-                <mat-icon class="mat-24">delete</mat-icon>
-            </button> -->
-        </mat-list-item>
-        <mat-list-item role="listitem" *ngIf="codes.length === 0" class="product-no-code">
-            <span class="product-link">{{'codes.noCodes' | translate}}</span>
-            <!-- <button mat-icon-button (click)="deleteCode()">
-                        <mat-icon class="mat-24">delete</mat-icon>
-                    </button> -->
-        </mat-list-item>
-    </mat-list>
-</mat-card>
-<div class="loadNext">
-    <button (click)="loadNextFifty()" *ngIf="codes.length % 50 == 0" mat-button color="primary">
-        Load Next 50 Codes
-    </button>
-</div>
-<div *ngIf="showGenerateShade" class='generateShade'>
-    <h1 class="generateShadeText">Please Wait while the codes are being Generated</h1>
-    <mat-progress-bar class="generateShadeProgress" max="100" [value]="generateProgress"></mat-progress-bar>
+<div class="main">
+    <mat-card class="tasks-card">
+        <!-- <mat-card-header>
+            <mat-card-title>to-do list</mat-card-title>
+            <mat-card-subtitle>By Nora</mat-card-subtitle>
+        </mat-card-header> -->
+        <mat-card-content>
+            <div class="task-item">
+                <mat-input-container floatPlaceholder="auto" class="new-task-input">
+                    <input matInput type="text" placeholder="New Task" [(ngModel)]="newTask">
+                </mat-input-container>
+                <button [disabled]="!newTask || newTask.length < 1" mat-button (click)="add()" class="add-btn">Add</button>
+            </div>
+            <p class="task-item " *ngIf="!taskList || taskList.length < 1">
+                All tasks have been completed!
+            </p>
+
+            <mat-list *ngIf="taskList && taskList.length >= 1" dense class="task-list">
+                <mat-list-item *ngFor="let task of taskList" class="task-item fade" [ngClass]="{'completed': task.done }">
+                    <span class="task-name">
+                        {{task.name}}
+                    </span>
+                    <div class="task-done">
+                        <button *ngIf="task.done" mat-icon-button (click)="updateStatus(task.key, false)" class="check">
+                            <mat-icon class="mat-18">check_circle</mat-icon>
+                        </button>
+                        <button *ngIf="!task.done" mat-icon-button (click)="updateStatus(task.key, true)" class="check">
+                            <mat-icon class="mat-18">radio_button_checked
+                            </mat-icon>
+                        </button>
+                    </div>
+
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+        <mat-card-actions>
+            <button [disabled]="!completedTasks || completedTasks.length < 1" mat-button (click)="clearCompleted()"
+                class="clear-btn">Clear Completed Tasks</button>
+        </mat-card-actions>
+    </mat-card>
 </div>

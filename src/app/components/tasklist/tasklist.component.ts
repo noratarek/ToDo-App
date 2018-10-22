@@ -2,8 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
-import { MatDialog } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../../shared/services/task.service';
 
 @Component({
@@ -13,38 +11,56 @@ import { TaskService } from '../../shared/services/task.service';
 })
 export class TasklistComponent implements OnInit, OnDestroy {
 
-  productId: string;
-  codes = [];
-  subscription: Subscription;
-  subscription2: Subscription;
-  uploadRef: any;
+  newTask: string;
+  taskList = [];
+  completedTasks = [];
+  subscription: Subscription = null;
   task: any;
-  uploadProgress: any;
-  product = <any>{};
-  multiCodes = [];
-  generateProgress = 0;
-  showGenerateShade = false;
 
   constructor(
     public taskService: TaskService,
     public translate: TranslateService,
     public snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    private route: ActivatedRoute,
   ) {
     this.translate.setDefaultLang('en');
   }
 
   ngOnInit() {
+    this.subscription = this.taskService.getTaskList().subscribe(result => {
+      this.taskList = result;
+      this.completedTasks = this.taskList.filter(task => task.done);
+    });
+  }
 
+  updateStatus(taskKey, value) {
+    this.taskService.updateStatus(taskKey, value).then().catch((err => {
+      this.snackBar.open('Error.', 'X', { duration: 1000 });
+    }));
+  }
+
+  clearCompleted() {
+    if (this.completedTasks && this.completedTasks.length > 0) {
+      this.completedTasks.forEach(task => {
+        this.taskService.deleteTask(task.key).catch(err => {
+          this.snackBar.open('Error.', 'X', { duration: 1000 });
+        });
+      });
+    } else {
+      this.snackBar.open('Error.', 'X', { duration: 1000 });
+    }
+  }
+
+  add() {
+    if (this.newTask) {
+      this.taskService.addTask(this.newTask).then(res => {
+        this.newTask = null;
+      });
+    }
   }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
-    }
-    if (this.subscription2) {
-      this.subscription2.unsubscribe();
     }
   }
 

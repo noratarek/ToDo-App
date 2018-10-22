@@ -1,7 +1,7 @@
 {
   "projects": {
-    "production": "total-product-codes",
-    "development": "total-product-codes",
-    "default": "total-product-codes"
+    "production": "tasklist-e92cb",
+    "development": "tasklist-e92cb",
+    "default": "tasklist-e92cb"
   }
 }
