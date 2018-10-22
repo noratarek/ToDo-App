@@ -1,0 +1,50 @@
+image: trion/ng-cli-karma
+
+before_script:
+  - npm prune
+  - rm ./package-lock.json
+  - npm install
+  - npm install -g firebase-tools
+# The following lines are for Angular projects that use SASS Files instead of CSS files for styling (Due to a bug in @angular/compiler-cli V^5.2.0)
+  - npm ls node-sass
+  - nodejs node_modules/node-sass/scripts/install.js
+  - npm rebuild node-sass
+
+
+stages:
+  - build
+
+cache:
+  paths:
+    - node_modules/
+# Build Job
+build_job_dev:
+  stage: build
+  # Run a build to check for build errors on every commit
+  except:
+    - master
+    - develop
+  script:
+    - ./node_modules/@angular/cli/bin/ng build --progress false --prod
+
+# Build and deploy development version
+build_and_deploy_job_dev:
+  stage: build
+  only:
+    - develop
+  script:
+    - firebase use development --token "$FIREBASE_DEPLOY_KEY"
+    - ./node_modules/@angular/cli/bin/ng build --progress false --prod --env=dev && firebase deploy --token "$FIREBASE_DEPLOY_KEY" --only hosting
+    - cd functions && npm install && cd ..
+    - firebase deploy --token "$FIREBASE_DEPLOY_KEY" --except hosting
+
+# Build and deploy Production site
+build_and_deploy_job_prod:
+  stage: build
+  only:
+    - master
+  script:
+    - firebase use production --token "$FIREBASE_DEPLOY_KEY"
+    - ./node_modules/@angular/cli/bin/ng build --progress false --prod && firebase deploy --token "$FIREBASE_DEPLOY_KEY" --only hosting
+    - cd functions && npm install && cd ..
+    - firebase deploy --token "$FIREBASE_DEPLOY_KEY" --except hosting

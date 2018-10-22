@@ -1,0 +1,52 @@
+{
+  "general": {
+    "brand": "Total Codes",
+    "email": "E-mail",
+    "password": "Password",
+    "repeatPassword": "repeatPassword",
+    "signup": "Signup",
+    "login": "Login",
+    "logout": "Logout",
+    "username": "Username",
+    "deleteConfirmation": "Are you sure you want to delete this item?",
+    "successMessage": "operation success",
+    "errorMessage": "An error occured",
+    "actions": {
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "save": "Save",
+      "add": "Add New",
+      "open": "Open"
+    }
+  },
+  "auth": {
+    "forgotYourPassword": "Forgot your password?",
+    "createAccount": "Register a new account",
+    "login": "Login to your account"
+  },
+  "errors": {
+    "login": "error in user name or password",
+    "notAdmin": "you are not authorized to login",
+    "invalidMail": "this is invalid email format",
+    "shortPassword": "the password must be atleast 8 characters",
+    "mailUsed": "this email is already used",
+    "passwordDontMatch": "passwords missmatch",
+    "required": "this field is required"
+  },
+  "layout":{
+    "products": "Products Management"
+  },
+  "product":{
+    "pageTitle": "Products Management",
+    "successMessage": "New Product Created Successfuly",
+    "noProducts": "There are currently no products registered, add one above!"
+  },
+  "codes": {
+    "pageTitle": "Products Codes",
+    "noCodes": "There are currently no codes for this product, add one above!",
+    "import": "Import Codes (CSV)",
+    "export": "Export Codes (CSV)",
+    "upload": "Upload File"
+  }
+}
