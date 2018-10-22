@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "production": "tasklist-e92cb",
+    "development": "tasklist-e92cb",
+    "default": "tasklist-e92cb"
+  }
+}
