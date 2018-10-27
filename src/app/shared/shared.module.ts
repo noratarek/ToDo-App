@@ -1,3 +1,4 @@
+import { ListService } from './services/list.service';
 import { TaskService } from './services/task.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,6 +13,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
 // Custom Services
 import { SharedService } from './services/shared.service';
+import { UserService } from './services/user.service';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import { SharedService } from './services/shared.service';
   ],
   providers: [
     SharedService,
-    TaskService
+    TaskService,
+    ListService,
+    UserService,
   ]
 })
 

@@ -9,8 +9,8 @@ export class TaskService {
 
     constructor(private ss: SharedService) { }
 
-    getTaskList(): Observable<any[]> {
-        return this.ss.getListAsSnapshot(this.tasksPath, null).map(taskList => {
+    getTaskList(listKey): Observable<any[]> {
+        return this.ss.getListAsSnapshot(this.tasksPath,  ref => ref.orderByChild('listKey').equalTo(listKey)).map(taskList => {
             return taskList.map(c => Object.assign(c.payload.val(), { key: c.payload.key }));
         });
     }
@@ -19,8 +19,8 @@ export class TaskService {
         return this.ss.getObject(`${this.tasksPath}/${key}`);
     }
 
-    addTask(taskName) {
-        return this.ss.pushObjectToList(`${this.tasksPath}`, { name: taskName });
+    addTask(taskName, listKey) {
+        return this.ss.pushObjectToList(`${this.tasksPath}`, { name: taskName, listKey: listKey });
     }
 
     deleteTask(taskKey): Promise<void> {

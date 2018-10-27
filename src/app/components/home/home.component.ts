@@ -1,10 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { MatSnackBar } from '@angular/material';
+import { TasklistComponent } from './../tasklist/tasklist.component';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { MatDialog } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '../../shared/services/task.service';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -13,31 +11,30 @@ import { TaskService } from '../../shared/services/task.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  productId: string;
-  codes = [];
   subscription: Subscription;
   subscription2: Subscription;
-  uploadRef: any;
-  task: any;
-  uploadProgress: any;
-  product = <any>{};
-  multiCodes = [];
-  generateProgress = 0;
-  showGenerateShade = false;
+  userKey: string;
+  @ViewChild(TasklistComponent) tasklistComponent: TasklistComponent;
 
   constructor(
+    public userService: UserService,
     public taskService: TaskService,
-    public translate: TranslateService,
-    public snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    private route: ActivatedRoute,
   ) {
-    this.translate.setDefaultLang('en');
   }
 
   ngOnInit() {
+    this.userKey = this.userService.getUserId;
   }
 
+  changeActiveList(listKey) {
+    this.subscription = this.taskService.getTaskList(listKey).subscribe(tasks => {
+      this.tasklistComponent.taskList = tasks;
+      this.tasklistComponent.listKey = listKey;
+      if (tasks && tasks.length >= 1) {
+        this.tasklistComponent.completedTasks = tasks.filter(task => task.done);
+      }
+    });
+  }
 
   ngOnDestroy() {
     if (this.subscription) {

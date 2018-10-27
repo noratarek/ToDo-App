@@ -1,9 +1,5 @@
 <div class="main">
     <mat-card class="tasks-card">
-        <!-- <mat-card-header>
-            <mat-card-title>to-do list</mat-card-title>
-            <mat-card-subtitle>By Nora</mat-card-subtitle>
-        </mat-card-header> -->
         <mat-card-content>
             <div class="task-item">
                 <mat-input-container floatPlaceholder="auto" class="new-task-input">
@@ -14,7 +10,6 @@
             <p class="task-item " *ngIf="!taskList || taskList.length < 1">
                 All tasks have been completed!
             </p>
-
             <mat-list *ngIf="taskList && taskList.length >= 1" dense class="task-list">
                 <mat-list-item *ngFor="let task of taskList" class="task-item fade" [ngClass]="{'completed': task.done }">
                     <span class="task-name">
@@ -29,7 +24,6 @@
                             </mat-icon>
                         </button>
                     </div>
-
                     <mat-divider></mat-divider>
                 </mat-list-item>
             </mat-list>

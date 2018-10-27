@@ -1,0 +1,30 @@
+<div class="login-container">
+    <form (ngSubmit)="login()">
+        <mat-card class="login-form">
+            <mat-card-header>
+                <mat-card-title>Login to your TODO Account.</mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="form-content">
+                <div>
+                    <mat-form-field class="input-fields">
+                        <mat-icon matPrefix>mail</mat-icon>
+                        <input matInput type="email" [(ngModel)]="model.email" id="email" name="email" placeholder="{{'general.email' | translate}}"
+                            required>
+                    </mat-form-field>
+                </div>
+                <div>
+                    <mat-form-field class="input-fields">
+                        <mat-icon matPrefix>lock</mat-icon>
+                        <input matInput type="password" [(ngModel)]="model.password" id="password" name="password"
+                            placeholder="{{'general.password' | translate}}" required>
+                    </mat-form-field>
+                </div>
+
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-raised-button color="primary" type="submit" class="btn btn-primary px-4 login-btn">{{'general.login'
+                    | translate}}</button>
+            </mat-card-actions>
+        </mat-card>
+    </form>
+</div>

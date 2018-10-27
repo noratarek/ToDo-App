@@ -1,3 +1,5 @@
+import { ListService } from './shared/services/list.service';
+import { AuthServiceService } from './components/auth/auth-service.service';
 import { TaskService } from './shared/services/task.service';
 import { ListsComponent } from './components/lists/lists.component';
 import { HomeComponent } from './components/home/home.component';
@@ -16,6 +18,10 @@ import { MaterialsModule } from './shared/materials.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { TasklistComponent } from './components/tasklist/tasklist.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { AuthGuardService } from './components/auth/auth-guard.service';
+import { LoginAuthGuardService } from './components/auth/login/login-auth-guard.service';
+import { UserService } from './shared/services/user.service';
 
 @NgModule({
   declarations: [
@@ -23,6 +29,7 @@ import { TasklistComponent } from './components/tasklist/tasklist.component';
     HomeComponent,
     ListsComponent,
     TasklistComponent,
+    LoginComponent,
   ],
   entryComponents: [],
   imports: [
@@ -32,11 +39,16 @@ import { TasklistComponent } from './components/tasklist/tasklist.component';
     BrowserAnimationsModule,
     MaterialsModule,
     FormsModule,
-    FlexLayoutModule,
+    FlexLayoutModule
   ],
   providers: [
     SharedService,
-    TaskService
+    TaskService,
+    ListService,
+    AuthGuardService,
+    LoginAuthGuardService,
+    UserService,
+    AuthServiceService
   ],
   bootstrap: [AppComponent]
 })

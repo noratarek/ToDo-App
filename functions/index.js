@@ -1,12 +1,23 @@
 const functions = require('firebase-functions');
-// The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
-const path = require('path');
-const gcs = require('@google-cloud/storage')();
-const os = require('os');
-const fs = require('fs');
-const express = require('express');
-const cors = require('cors');
-const url = require('url');
 
 admin.initializeApp();
+
+/**
+ * Function to delete all the tasks of a list if the list has been deleted
+ */
+exports.handleDeleteTasksList = functions.database.ref('lists/{listKey}').onDelete((event) => {
+    const listKey = event.params.listKey;
+    const promises = [];
+    return admin.database().ref('tasks').once('value', (tasks) => {
+      const tasksObject = tasks.val();
+      const taskList = Object.keys(tasksObject).map(taskKey => Object.assign(tasksObject[taskKey], { key : taskKey }));
+      taskList.forEach(task => {
+        if (task.list === listKey) {
+          promises.push(admin.database().ref(`tasks/${task.key}`).remove());
+        }
+      });
+    }).then(() => {
+      return Promise.all(promises);
+    })
+  })

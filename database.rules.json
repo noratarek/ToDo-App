@@ -1,11 +1,6 @@
 {
   "rules": {
-    ".read": "auth !== null",
-    ".write": "auth !== null",
-    "productCodes": {
-      ".indexOn": [
-        "productId"
-      ]
-    }
+    ".read": "true",
+    ".write": "true"
   }
 }

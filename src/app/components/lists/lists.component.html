@@ -1,11 +1,28 @@
-<!-- <mat-list role="list">
-    <mat-list-item *ngFor="let item of topics" [ngClass]="{'selected-topic': item.key === selectedTopic.key}" class="topic-item"
-        role="listitem" (click)="selectHelpCenter(item.key) ; selectedTopic = item">
-        <span class="title-text">
-            {{item.title}}
-        </span>
-        <i class="material-icons topic-icon">
-            chevron_right
-        </i>
-    </mat-list-item>
-</mat-list> -->
+<div class="main">
+    <mat-card class="tasks-card">
+        <mat-card-content>
+            <div class="task-item">
+                <mat-input-container floatPlaceholder="auto" class="new-task-input">
+                    <input matInput type="text" placeholder="New List" [(ngModel)]="newList">
+                </mat-input-container>
+                <button [disabled]="!newList || newList.length < 1" mat-button (click)="add()" class="add-btn">Add</button>
+            </div>
+            <p class="task-item " *ngIf="!lists || lists.length < 1">
+                You don't have any lists yet. Add new one from above.
+            </p>
+            <mat-list dense *ngIf="lists && lists.length >= 1">
+                <mat-list-item (mouseenter)="hovered = true" (mouseleave)="hovered = false;" *ngFor="let list of lists"
+                    class="list-item" [ngClass]="{'active': list.key === activeListKey }" (click)="activateList(list.key)">
+                    <span class="task-name">
+                        {{list.name}}
+                    </span>
+                    <div class="task-done" *ngIf="hovered && list.key === activeListKey">
+                        <button mat-icon-button (click)="deleteList(list.key)" class="check">
+                            <mat-icon class="mat-18">delete_forever</mat-icon>
+                        </button>
+                    </div>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,11 @@
+.main-container {
+    display: flex;
+}
+
+.lists-container {
+    flex: 25%;
+}
+
+.tasks-container {
+    flex: 75%;
+}

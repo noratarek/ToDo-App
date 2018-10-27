@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
@@ -12,24 +12,18 @@ import { TaskService } from '../../shared/services/task.service';
 export class TasklistComponent implements OnInit, OnDestroy {
 
   newTask: string;
-  taskList = [];
   completedTasks = [];
   subscription: Subscription = null;
-  task: any;
+  listKey: string;
+  taskList: any[];
 
   constructor(
     public taskService: TaskService,
-    public translate: TranslateService,
     public snackBar: MatSnackBar,
   ) {
-    this.translate.setDefaultLang('en');
   }
 
   ngOnInit() {
-    this.subscription = this.taskService.getTaskList().subscribe(result => {
-      this.taskList = result;
-      this.completedTasks = this.taskList.filter(task => task.done);
-    });
   }
 
   updateStatus(taskKey, value) {
@@ -52,7 +46,7 @@ export class TasklistComponent implements OnInit, OnDestroy {
 
   add() {
     if (this.newTask) {
-      this.taskService.addTask(this.newTask).then(res => {
+      this.taskService.addTask(this.newTask, this.listKey).then(res => {
         this.newTask = null;
       });
     }

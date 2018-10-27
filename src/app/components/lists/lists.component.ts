@@ -1,10 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
-import { MatDialog } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
-import { TaskService } from '../../shared/services/task.service';
+import { ListService } from '../../shared/services/list.service';
 
 @Component({
   selector: 'app-lists',
@@ -12,39 +9,57 @@ import { TaskService } from '../../shared/services/task.service';
   styleUrls: ['./lists.component.css']
 })
 export class ListsComponent implements OnInit, OnDestroy {
-
-  productId: string;
-  codes = [];
   subscription: Subscription;
-  subscription2: Subscription;
-  uploadRef: any;
-  task: any;
-  uploadProgress: any;
-  product = <any>{};
-  multiCodes = [];
-  generateProgress = 0;
-  showGenerateShade = false;
-
+  newList: string;
+  lists: any[];
+  activeListKey: string;
+  @Input() userKey: string;
+  @Output() activatedList = new EventEmitter<any>();
   constructor(
-    public taskService: TaskService,
-    public translate: TranslateService,
+    public listService: ListService,
     public snackBar: MatSnackBar,
-    public dialog: MatDialog,
-    private route: ActivatedRoute,
   ) {
-    this.translate.setDefaultLang('en');
   }
 
   ngOnInit() {
+    this.getLists();
   }
 
+  getLists() {
+    this.subscription = this.listService.getUserLists(this.userKey).subscribe((lists: any) => {
+      this.lists = lists;
+      if (this.lists && this.lists[0]) {
+        this.activateList(this.lists[0].key);
+      }
+    });
+  }
+
+  add() {
+    if (this.newList) {
+      this.listService.addList(this.newList, this.userKey).then(res => {
+        this.newList = null;
+      });
+    }
+  }
+
+  activateList(listKey) {
+    this.activeListKey = listKey;
+    this.activatedList.emit(listKey);
+  }
+
+  deleteList(listkey) {
+    if (window.confirm('Are you sure you want to delete this list?')) {
+      this.listService.deleteList(listkey).then(success => {
+        this.snackBar.open('List Deleted Successfully.', 'X', { duration: 1000 });
+      }).catch(error => {
+        this.snackBar.open('Error.', 'X', { duration: 1000 });
+      });
+    }
+  }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
-    }
-    if (this.subscription2) {
-      this.subscription2.unsubscribe();
     }
   }
 

@@ -1,1 +1,4 @@
-<app-tasklist class="tasklist-comp"></app-tasklist>
+<div class="main-container">
+    <app-lists [userKey]="userKey" (activatedList)="changeActiveList($event)" class="lists-container"></app-lists>
+    <app-tasklist class="tasks-container"></app-tasklist>
+</div>
